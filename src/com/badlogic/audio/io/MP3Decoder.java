@@ -1,9 +1,6 @@
 package com.badlogic.audio.io;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PushbackInputStream;
+import java.io.*;
 import java.util.HashMap;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -45,6 +42,14 @@ public class MP3Decoder implements Decoder
 											baseFormat.getChannels() * 2,
 											baseFormat.getSampleRate(), false);
 		this.in = AudioSystem.getAudioInputStream(format, this.in);
+	}
+
+	public MP3Decoder(File file) throws Exception
+	{
+		AudioInputStream in = AudioSystem.getAudioInputStream(file);
+		AudioFormat baseFormat = in.getFormat();
+		AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
+		this.in = AudioSystem.getAudioInputStream(decodedFormat, in);
 	}
 
 	@Override
